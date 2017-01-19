@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:security="http://www.springframework.org/schema/security"
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -10,48 +10,48 @@
 		http://www.springframework.org/schema/jdbc
 		http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 	
-	<security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
+	<global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
 	
-	<security:http>
-		<security:intercept-url pattern="/login" access="permitAll" requires-channel="https" />
-		<security:intercept-url pattern="/login/impersonate" access="hasRole('ROLE_ADMIN')" requires-channel="https" />
-		<security:intercept-url pattern="/logout/impersonate" access="authenticated" requires-channel="https" />
-		<security:intercept-url pattern="/home" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" requires-channel="https" />
-		<security:intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN') and fullyAuthenticated" requires-channel="https" />
-		<security:intercept-url pattern="/user/*" access="hasRole('ROLE_USER')" requires-channel="https" />
+	<http>
+		<intercept-url pattern="/login" access="permitAll" requires-channel="https" />
+		<intercept-url pattern="/login/impersonate" access="hasRole('ROLE_ADMIN')" requires-channel="https" />
+		<intercept-url pattern="/logout/impersonate" access="authenticated" requires-channel="https" />
+		<intercept-url pattern="/home" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" requires-channel="https" />
+		<intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN') and fullyAuthenticated" requires-channel="https" />
+		<intercept-url pattern="/user/*" access="hasRole('ROLE_USER')" requires-channel="https" />
 
-		<security:form-login login-page="/login" authentication-failure-url="/login?error"  default-target-url="/home" always-use-default-target="true" />
-		<security:logout logout-url="/logout" logout-success-url="/login" />
-		<security:access-denied-handler error-page="/accessDenied" />
-		<security:remember-me key="ebooklib-key" />
+		<form-login login-page="/login" authentication-failure-url="/login?error"  default-target-url="/home" always-use-default-target="true" />
+		<logout logout-url="/logout" logout-success-url="/login" />
+		<access-denied-handler error-page="/accessDenied" />
+		<remember-me key="shoppingCart-key" />
 		
-		<security:custom-filter ref="switchUserFilter" position="SWITCH_USER_FILTER" />
+		<custom-filter ref="switchUserFilter" position="SWITCH_USER_FILTER" />
 		
-		<security:session-management>
-			<security:concurrency-control expired-url="/sessionExpired" />
-		</security:session-management>		
-	</security:http>
+		<session-management>
+			<concurrency-control expired-url="/sessionExpired" />
+		</session-management>		
+	</http>
 
-	<security:authentication-manager>
-		<security:authentication-provider user-service-ref="jdbcUserDetailsService">
-			<security:password-encoder hash="sha-256" />
-		</security:authentication-provider>
-	</security:authentication-manager>
+	<authentication-manager>
+		<authentication-provider user-service-ref="jdbcUserDetailsService">
+			<password-encoder hash="sha-256" />
+		</authentication-provider>
+	</authentication-manager>
 	
 	<jdbc:embedded-database id="dataSource">
 		<jdbc:script location="classpath:security-schema.sql" />
 		<jdbc:script location="classpath:users.sql" />
 	</jdbc:embedded-database>
 	
-	<bean id="jdbcUserDetailsService" class="org.springframework.security.provisioning.JdbcUserDetailsManager">
-		<property name="enableAuthorities" value="false" />
-		<property name="enableGroups" value="true" />
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+	<beans:bean id="jdbcUserDetailsService" class="org.springframework.security.provisioning.JdbcUserDetailsManager">
+		<beans:property name="enableAuthorities" value="false" />
+		<beans:property name="enableGroups" value="true" />
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
 
-	<bean id="switchUserFilter" class="org.springframework.security.web.authentication.switchuser.SwitchUserFilter">
-		<property name="userDetailsService" ref="jdbcUserDetailsService" />
-		<property name="targetUrl" value="/home" />
-	</bean>
+	<beans:bean id="switchUserFilter" class="org.springframework.security.web.authentication.switchuser.SwitchUserFilter">
+		<beans:property name="userDetailsService" ref="jdbcUserDetailsService" />
+		<beans:property name="targetUrl" value="/home" />
+	</beans:bean>
 
-</beans>
+</beans:beans>
