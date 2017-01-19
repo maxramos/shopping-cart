@@ -23,7 +23,7 @@
 		<form-login login-page="/login" authentication-failure-url="/login?error"  default-target-url="/home" always-use-default-target="true" />
 		<logout logout-url="/logout" logout-success-url="/login" />
 		<access-denied-handler error-page="/accessDenied" />
-		<remember-me key="shoppingCart-key" />
+		<remember-me key="shoppingCartKey" />
 		
 		<custom-filter ref="switchUserFilter" position="SWITCH_USER_FILTER" />
 		
